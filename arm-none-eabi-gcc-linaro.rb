@@ -19,6 +19,8 @@ class ArmNoneEabiGccLinaro < Formula
   depends_on "cloog"
   depends_on "isl"
 
+  conflicts_with "arm-none-eabi-binutils", :because => "We install our own version"
+
   fails_with :clang do
     cause "Host compiler and target newlib bootstrap need incompatible CFLAGS"
   end
