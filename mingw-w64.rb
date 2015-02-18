@@ -34,6 +34,7 @@ class MingwW64 < Formula
                            "--disable-dependency-tracking",
                            "--disable-nls",
                            "--program-prefix=#{target}-",
+                           "--infodir=#{info}/#{target}",
                            "--target=#{target}",
                            "--enable-targets=x86_64-w64-mingw32,i686-w64-mingw32"]
 

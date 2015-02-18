@@ -19,13 +19,15 @@ class ArmNoneEabiGccLinaro < Formula
   depends_on "cloog"
   depends_on "isl"
 
-  conflicts_with "arm-none-eabi-binutils", :because => "We install our own version"
+  conflicts_with "arm-none-eabi-binutils", :because => "we install our own version"
 
   fails_with :clang do
     cause "Host compiler and target newlib bootstrap need incompatible CFLAGS"
   end
 
   def install
+    target = "arm-none-eabi"
+
     mkdir "build" do
       # binutils installs happily as a separate package, but gcc breaks if
       # it isn't installed with the same prefix.
@@ -34,10 +36,10 @@ class ArmNoneEabiGccLinaro < Formula
       resource("binutils").stage do
         system "./configure", "--disable-debug",
                               "--disable-dependency-tracking",
-                              "--program-prefix=arm-none-eabi-",
-                              "--target=arm-none-eabi",
+                              "--program-prefix=#{target}-",
+                              "--target=#{target}",
                               "--prefix=#{prefix}",
-                              "--infodir=#{info}",
+                              "--infodir=#{info}/#{target}",
                               "--mandir=#{man}",
                               "--disable-werror",
                               "--enable-interwork",
@@ -49,9 +51,9 @@ class ArmNoneEabiGccLinaro < Formula
       end
 
       system "../configure", "--prefix=#{prefix}",
-                             "--target=arm-none-eabi",
+                             "--target=#{target}",
                              "--enable-languages=c,c++",
-                             "--program-prefix=arm-none-eabi-",
+                             "--program-prefix=#{target}-",
                              "--with-gmp=#{Formula["gmp"].opt_prefix}",
                              "--with-mpfr=#{Formula["mpfr"].opt_prefix}",
                              "--with-mpc=#{Formula["libmpc"].opt_prefix}",
@@ -59,6 +61,7 @@ class ArmNoneEabiGccLinaro < Formula
                              "--with-isl=#{Formula["isl"].opt_prefix}",
                              "--with-newlib",
                              "--mandir=#{man}",
+                             "--infodir=#{info}/#{target}",
                              "--disable-nls",
                              "--enable-multilib",
                              "--enable-interwork",
@@ -76,7 +79,7 @@ class ArmNoneEabiGccLinaro < Formula
 
       resource("newlib").stage do
         system "./configure", "--prefix=#{prefix}",
-                              "--target=arm-none-eabi",
+                              "--target=#{target}",
                               "--enable-interwork",
                               "--enable-multilib",
                               "--disable-libssp",
